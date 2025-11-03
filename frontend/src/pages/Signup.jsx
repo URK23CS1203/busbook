@@ -13,6 +13,9 @@ function Signup() {
 
   const navigate = useNavigate();
 
+  // ✅ Use deployed backend URL (same as Login.jsx)
+  const API_URL = import.meta.env.VITE_API_URL || "https://busbook-backend.vercel.app";
+
   // Handle input changes
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -28,7 +31,7 @@ function Signup() {
     }
 
     try {
-      const response = await axios.post("http://localhost:7000/api/user/signup", {
+      const response = await axios.post(`${API_URL}/api/user/signup`, {
         name: formData.name,
         email: formData.email,
         password: formData.password,
