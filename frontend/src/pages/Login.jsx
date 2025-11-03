@@ -10,6 +10,9 @@ function Login() {
   });
   const navigate = useNavigate();
 
+  // ✅ Use the deployed backend URL
+  const API_URL = import.meta.env.VITE_API_URL || "https://busbook-b518.vercel.app";
+
   // Handle input change
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -20,7 +23,9 @@ function Login() {
     e.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:7000/api/user/login", formData);
+      const response = await axios.post(`${API_URL}/api/user/login`, formData, {
+        withCredentials: true,
+      });
 
       if (response.status === 200) {
         const { token, user } = response.data;
@@ -29,8 +34,8 @@ function Login() {
         localStorage.setItem("token", token);
         localStorage.setItem("user", JSON.stringify(user));
 
-        alert("Login successful!");
-        console.log("🔐 JWT Token:", token); // You’ll see this in browser console
+        alert("✅ Login successful!");
+        console.log("🔐 JWT Token:", token);
 
         // ✅ Redirect based on role
         if (user.role === "admin") {
@@ -43,7 +48,7 @@ function Login() {
       alert(
         error.response?.data?.message ||
           error.response?.data?.error ||
-          "Invalid login credentials"
+          "❌ Invalid login credentials"
       );
     }
   };
